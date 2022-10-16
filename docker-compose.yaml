@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  bot:
+    container_name: bot
+    build:
+      context: .
+      dockerfile: bot.Dockerfile
+    depends_on:
+      - app
+
+  app:
+    container_name: web-app
+    build:
+      context: .
+      dockerfile: web.app.Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  db:
+    container_name: web-db
+    build:
+      context: .
+      dockerfile: web.db.Dockerfile
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "secret"
+      MYSQL_USER: "inst_user"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_DATABASE: "inst_database"
+    volumes:
+      - mysql-db:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+networks:
+  default:  
+
+volumes:
+  mysql-db:

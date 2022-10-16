@@ -1,0 +1,10 @@
+
+
+host: "web-app"
+port: 8080
+database:
+  host: "web-db"
+  port: 3306
+  user: "inst_user"
+  password: "secret"
+  instance: "inst_database"

@@ -1,0 +1,6 @@
+---
+
+token: -api-key-
+server:
+  host: "web-app"
+  port: 8080
