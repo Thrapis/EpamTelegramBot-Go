@@ -1,7 +1,9 @@
+# rename to config.yaml
 
-
-host: "web-app"
-port: 8080
+token: -api-key-
+server:
+  host: "web-app"
+  port: 8080
 database:
   host: "web-db"
   port: 3306

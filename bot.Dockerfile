@@ -2,13 +2,16 @@ FROM golang:1.17-alpine
 
 WORKDIR /bot
 
-COPY bot/go.mod bot/go.sum ./
+COPY go.mod go.sum ./
 
 RUN go mod download && go mod verify
 
-COPY bot/*.go ./
-COPY bot/config.yaml ./
+COPY cmd/bot ./cmd/bot
+COPY config ./config
+COPY internal/bot ./internal/bot
+COPY internal/database ./internal/database
+COPY config.yaml ./
 
-RUN go build -o main .
+RUN go build -o main ./cmd/bot/main.go
 
 CMD [ "./main" ]

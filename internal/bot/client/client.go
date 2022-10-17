@@ -1,6 +1,7 @@
-package main
+package client
 
 import (
+	cfg "baa-telebot/config"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -11,7 +12,7 @@ const (
 	helloPath = "/hello"
 )
 
-func HelloRequest(server ServerConfig) (result string) {
+func HelloRequest(server cfg.ServerConfig) (result string) {
 	var url = fmt.Sprintf("http://%s:%d%s", server.Host, server.Port, helloPath)
 	if response, err := http.Get(url); err != nil {
 		result = fmt.Sprintf("%s", err)

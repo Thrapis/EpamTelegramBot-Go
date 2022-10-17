@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"log"
@@ -8,9 +8,15 @@ import (
 )
 
 type Config struct {
-	Host     string `yaml:"host" env:"HOST" env-description: "server host" env-required: "true"`
-	Port     int32  `yaml:"port" env:"PORT" env-description: "server port" env-required: "true"`
-	Database DatabaseConfig
+	Token    string         `yaml:"token" env:"BOT_TOKEN" env-description: "Telegram bot token" env-required: "true"`
+	Server   ServerConfig   `yaml:"server"`
+	Database DatabaseConfig `yaml:"database"`
+	//GithubToken string       `yaml:"github_token" env:"GITHUB_TOKEN" env-description: "GitHub token" env-required: "true"`
+}
+
+type ServerConfig struct {
+	Host string `yaml:"host" env:"SERVER_HOST" env-description: "server host" env-required: "true"`
+	Port int32  `yaml:"port" env:"SERVER_PORT" env-description: "server port" env-required: "true"`
 }
 
 type DatabaseConfig struct {
@@ -21,13 +27,15 @@ type DatabaseConfig struct {
 	Instance string `yaml:"instance" env:"DATABASE_INSTANCE" env-description: "database instance" env-required: "true"`
 }
 
+const configPath = "config.yaml"
+
 var singleton *Config
 var load sync.Once
 
 func GetConfig() *Config {
 	load.Do(func() {
 		singleton = &Config{}
-		if err := cleanenv.ReadConfig("config.yaml", singleton); err != nil {
+		if err := cleanenv.ReadConfig(configPath, singleton); err != nil {
 			help, _ := cleanenv.GetDescription(singleton, nil)
 			log.Println(help)
 			log.Fatal(err)

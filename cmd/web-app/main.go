@@ -1,6 +1,8 @@
 package main
 
 import (
+	cfg "baa-telebot/config"
+	dbuser "baa-telebot/internal/web-app/database"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,8 +16,8 @@ const (
 	helloPath = "/hello"
 )
 
-func getHello(w http.ResponseWriter, r *http.Request) {
-	if users, err := getUsers(); err != nil {
+func GetHello(w http.ResponseWriter, r *http.Request) {
+	if users, err := dbuser.GetUsers(); err != nil {
 		w.Write([]byte(err.Error()))
 	} else {
 		w.Write([]byte("Hello, world!\n"))
@@ -33,7 +35,7 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 func Start(host string, port int32) {
 	router := mux.NewRouter()
 
-	router.HandleFunc(helloPath, getHello).Methods(http.MethodGet)
+	router.HandleFunc(helloPath, GetHello).Methods(http.MethodGet)
 
 	log.Println(fmt.Printf("Starting API server on %s:%d\n", host, port))
 	addr := fmt.Sprintf("%s:%d", host, port)
@@ -43,7 +45,7 @@ func Start(host string, port int32) {
 }
 
 func main() {
-	config := GetConfig()
+	config := cfg.GetConfig()
 
-	Start(config.Host, config.Port)
+	Start(config.Server.Host, config.Server.Port)
 }

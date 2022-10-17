@@ -1,6 +1,8 @@
 package main
 
 import (
+	cfg "baa-telebot/config"
+	cl "baa-telebot/internal/bot/client"
 	"fmt"
 	"reflect"
 
@@ -12,7 +14,7 @@ const (
 )
 
 func main() {
-	config := GetConfig()
+	config := cfg.GetConfig()
 	fmt.Println("Bot started...")
 	StartBot(config.Token)
 }
@@ -51,8 +53,8 @@ func IsTextMessage(text *string) bool {
 }
 
 func CommandHello(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	config := GetConfig()
-	result := HelloRequest(config.Server)
+	config := cfg.GetConfig()
+	result := cl.HelloRequest(config.Server)
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, result)
 	bot.Send(msg)
 }
