@@ -6,11 +6,13 @@ COPY go.mod go.sum ./
 
 RUN go mod download && go mod verify
 
-COPY cmd/bot ./cmd/bot
-COPY config ./config
-COPY internal/bot ./internal/bot
+COPY configs ./configs
+COPY internal/api ./internal/api
+COPY internal/config ./internal/config
 COPY internal/database ./internal/database
-COPY config.yaml ./
+
+COPY cmd/bot ./cmd/bot
+COPY internal/bot ./internal/bot
 
 RUN go build -o main ./cmd/bot/main.go
 

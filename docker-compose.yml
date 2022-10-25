@@ -5,7 +5,7 @@ services:
     container_name: bot
     build:
       context: .
-      dockerfile: bot.Dockerfile
+      dockerfile: bot.dockerfile
     depends_on:
       - app
 
@@ -13,7 +13,7 @@ services:
     container_name: web-app
     build:
       context: .
-      dockerfile: web.app.Dockerfile
+      dockerfile: web.app.dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -23,7 +23,7 @@ services:
     container_name: web-db
     build:
       context: .
-      dockerfile: web.db.Dockerfile
+      dockerfile: web.db.dockerfile
     restart: always
     ports:
       - "3306:3306"

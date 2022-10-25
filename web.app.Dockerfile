@@ -1,18 +1,20 @@
 FROM golang:1.17-alpine
 
-WORKDIR /app
+WORKDIR /web-app
 
 COPY go.mod go.sum ./
 
 RUN go mod download && go mod verify
 
-COPY cmd/web-app ./cmd/web-app
-COPY config ./config
-COPY internal/web-app ./internal/web-app
+COPY configs ./configs
+COPY internal/api ./internal/api
+COPY internal/config ./internal/config
 COPY internal/database ./internal/database
-COPY config.yaml ./
 
-RUN go build -o main ./cmd/web-app/main.go
+COPY cmd/web ./cmd/web
+COPY internal/web ./internal/web
+
+RUN go build -o main ./cmd/web/main.go
 
 EXPOSE 8080
 

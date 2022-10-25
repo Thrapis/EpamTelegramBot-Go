@@ -1,22 +1,17 @@
 package main
 
 import (
-	cfg "baa-telebot/config"
-	cl "baa-telebot/internal/bot/client"
+	cmd "baa-telebot/internal/bot/command"
+	cfg "baa-telebot/internal/config"
+
 	"fmt"
 	"reflect"
 
 	tgbotapi "github.com/Syfaro/telegram-bot-api"
 )
 
-const (
-	cmdHello = "hello"
-)
-
-func main() {
-	config := cfg.GetConfig()
-	fmt.Println("Bot started...")
-	StartBot(config.Token)
+func IsTextMessage(text *string) bool {
+	return reflect.TypeOf(*text).Kind() == reflect.String && *text != ""
 }
 
 func StartBot(token string) {
@@ -39,22 +34,15 @@ func StartBot(token string) {
 		}
 
 		if IsTextMessage(&update.Message.Text) {
-			switch update.Message.Text {
-			case cmdHello:
-				CommandHello(bot, &update)
-
+			if command := cmd.RecognizeCommand(update.Message.Text); command != nil {
+				command(bot, &update)
 			}
 		}
 	}
 }
 
-func IsTextMessage(text *string) bool {
-	return reflect.TypeOf(*text).Kind() == reflect.String && *text != ""
-}
-
-func CommandHello(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+func main() {
 	config := cfg.GetConfig()
-	result := cl.HelloRequest(config.Server)
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, result)
-	bot.Send(msg)
+	fmt.Println("Bot started...")
+	StartBot(config.Token)
 }

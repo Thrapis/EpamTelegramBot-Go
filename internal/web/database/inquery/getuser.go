@@ -1,21 +1,16 @@
-package user
+package inquery
 
 import (
-	cfg "baa-telebot/config"
 	model "baa-telebot/internal/database"
-	"database/sql"
-	"fmt"
+	src "baa-telebot/internal/web/database/source"
+	sql "database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func GetUsers() ([]*model.User, error) {
-	config := cfg.GetConfig()
 
-	// "inst_user:secret@tcp(db:3306)/inst_database"
-	datasourceName := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
-		config.Database.User, config.Database.Password, config.Database.Host,
-		config.Database.Port, config.Database.Instance)
+	datasourceName := src.GetSource()
 
 	db, err := sql.Open("mysql", datasourceName)
 	if err != nil {

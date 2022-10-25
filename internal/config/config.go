@@ -27,7 +27,7 @@ type DatabaseConfig struct {
 	Instance string `yaml:"instance" env:"DATABASE_INSTANCE" env-description: "database instance" env-required: "true"`
 }
 
-const configPath = "config.yaml"
+const configPath = "configs/config.yaml"
 
 var singleton *Config
 var load sync.Once
